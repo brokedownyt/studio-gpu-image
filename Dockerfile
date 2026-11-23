@@ -14,12 +14,10 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends \
       libxfixes3 libxcomposite1 libxdamage1 libatk-bridge2.0-0 libpango-1.0-0 libcairo2 libcups2 \
       fonts-noto-core fonts-noto-color-emoji fonts-dejavu-core \
  && rm -rf /var/lib/apt/lists/*
-# Naya ffmpeg 8.1 (BtbN static, NVENC; BtbN purane "latest" builds hata deta hai, build fail ho to naya n<ver> lo): Ubuntu ka ffmpeg 4.4 naye driver (595.x, RTX 4090) par
-# "OpenEncodeSessionEx failed: unsupported device" deta hai (14/15/23 Nov logs). /usr/local/bin PATH me /usr/bin se pehle.
-RUN curl -sfL https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-n8.1-latest-linux64-gpl-8.1.tar.xz | tar -xJ -C /opt \
- && ln -s /opt/ffmpeg-n8.1-latest-linux64-gpl-8.1 /opt/ffmpeg \
- && ln -sf /opt/ffmpeg/bin/ffmpeg /usr/local/bin/ffmpeg && ln -sf /opt/ffmpeg/bin/ffprobe /usr/local/bin/ffprobe \
- && /usr/local/bin/ffmpeg -hide_banner -encoders | grep -q h264_nvenc
+# Extra ffmpeg 8.1 (BtbN static) /opt/ffmpeg/bin me: naye filters/codecs ke liye. Default `ffmpeg` Ubuntu wala 4.4 hi rehta hai,
+# kyunki 8.1 ka NVENC driver >= 570 maangta hai (purane hosts par toot-ta). 23 Nov test: 154476 par NVENC dono se fail = host ki dikkat.
+# BtbN purane "latest" builds hata deta hai: build fail ho to naya n<ver> lo.
+RUN curl -sfL https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-n8.1-latest-linux64-gpl-8.1.tar.xz | tar -xJ -C /opt  && ln -s /opt/ffmpeg-n8.1-latest-linux64-gpl-8.1 /opt/ffmpeg  && /opt/ffmpeg/bin/ffmpeg -hide_banner -encoders | grep -q h264_nvenc
 # Node 20.18.0 (run.sh wala version)
 RUN curl -sfL https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz | tar -xJ -C /opt \
  && ln -s /opt/node-v20.18.0-linux-x64 /opt/node
