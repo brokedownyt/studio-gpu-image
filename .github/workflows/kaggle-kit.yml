@@ -1,0 +1,25 @@
+name: kaggle-kit
+# render-v1 image se Kaggle ke liye setup kit nikaalo (Node 20.18.0 + node_modules: @remotion/renderer 4.0.537
+# + headless shell, playwright 1.56.0 + Chromium). PC isse download karke dono Kaggle accounts me private dataset banata hai.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  packages: read
+jobs:
+  kit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: extract kit from image
+        run: |
+          mkdir -p kit
+          docker run --rm -v "$PWD/kit:/kit" ghcr.io/${{ github.repository_owner }}/studio-gpu:render-v1 bash -c '
+            set -e
+            cd / && tar -czf /kit/studio-kit.tgz opt/node-v20.18.0-linux-x64 root/package.json root/node_modules root/.cache/ms-playwright opt/studio/env.sh
+            ls -la /kit'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: studio-kit
+          path: kit/studio-kit.tgz
+          compression-level: 0
+          retention-days: 7
