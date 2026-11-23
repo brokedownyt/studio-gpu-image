@@ -15,7 +15,7 @@ jobs:
           mkdir -p kit
           docker run --rm -v "$PWD/kit:/kit" ghcr.io/${{ github.repository_owner }}/studio-gpu:render-v1 bash -c '
             set -e
-            cd / && tar -czf /kit/studio-kit.tgz opt/node-v20.18.0-linux-x64 opt/ffmpeg-n7.1-latest-linux64-gpl-7.1 root/package.json root/node_modules root/.cache/ms-playwright opt/studio/env.sh
+            cd / && tar -czf /kit/studio-kit.tgz opt/node-v20.18.0-linux-x64 opt/ffmpeg-n8.1-latest-linux64-gpl-8.1 root/package.json root/node_modules root/.cache/ms-playwright opt/studio/env.sh
             ls -la /kit'
       - uses: actions/upload-artifact@v4
         with:

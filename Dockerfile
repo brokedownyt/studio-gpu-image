@@ -14,10 +14,10 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends \
       libxfixes3 libxcomposite1 libxdamage1 libatk-bridge2.0-0 libpango-1.0-0 libcairo2 libcups2 \
       fonts-noto-core fonts-noto-color-emoji fonts-dejavu-core \
  && rm -rf /var/lib/apt/lists/*
-# Naya ffmpeg 7.1 (BtbN static, NVENC): Ubuntu ka ffmpeg 4.4 naye driver (595.x, RTX 4090) par
+# Naya ffmpeg 8.1 (BtbN static, NVENC; BtbN purane "latest" builds hata deta hai, build fail ho to naya n<ver> lo): Ubuntu ka ffmpeg 4.4 naye driver (595.x, RTX 4090) par
 # "OpenEncodeSessionEx failed: unsupported device" deta hai (14/15/23 Nov logs). /usr/local/bin PATH me /usr/bin se pehle.
-RUN curl -sfL https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-n7.1-latest-linux64-gpl-7.1.tar.xz | tar -xJ -C /opt \
- && ln -s /opt/ffmpeg-n7.1-latest-linux64-gpl-7.1 /opt/ffmpeg \
+RUN curl -sfL https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-n8.1-latest-linux64-gpl-8.1.tar.xz | tar -xJ -C /opt \
+ && ln -s /opt/ffmpeg-n8.1-latest-linux64-gpl-8.1 /opt/ffmpeg \
  && ln -sf /opt/ffmpeg/bin/ffmpeg /usr/local/bin/ffmpeg && ln -sf /opt/ffmpeg/bin/ffprobe /usr/local/bin/ffprobe \
  && /usr/local/bin/ffmpeg -hide_banner -encoders | grep -q h264_nvenc
 # Node 20.18.0 (run.sh wala version)
